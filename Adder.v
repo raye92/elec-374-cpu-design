@@ -1,22 +1,25 @@
+module adder(A, B, Control, Result);
 
-module adder(A, B, Result);
+input [31:0] A, B;
+input Control;
+output [31:0] Result;
 
-input [31:0] A, B
-output Result;
-
-reg [31:0] result;
+reg [31:0] Result;
+reg [31:0] SignedB;
 reg [32:0] LocalCarry;
 
 integer i;
 
-always@(A or B)
+always@(A or B or Control)
 	begin
-		LocalCarry = 33'd0
+		LocalCarry = 33'd0;
+		if (Control) begin
+			SignedB = ~B + 1;
+		end
 		for(i = 0; i < 32; i = i + 1)
 		begin
-			Result[i] = A[i]^B[i]LocalCarry[i];
-			LocalCarry[i+1] = (A[i] & B[i])|(LocalCarry[i] & (A[i]|B[i]));
+			Result[i] = A[i]^SignedB[i]^LocalCarry[i];
+			LocalCarry[i+1] = (A[i] & SignedB[i])|(LocalCarry[i] & (A[i]|SignedB[i]));
 		end
-end
+	end
 endmodule
-
