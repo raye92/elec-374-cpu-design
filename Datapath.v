@@ -33,8 +33,8 @@ module DataPath(
 	
 	input wire IRin,
 	
-	input wire RYin,
-	
+	input wire RYin
+);
 	
 	
 	
@@ -44,21 +44,21 @@ module DataPath(
 wire [31:0] BusMuxOut;
 
 //R0-15
-wire [31:0] BusMuxIn-R0, BusMuxIn-R1, BusMuxIn-R2, BusMuxIn-R3, BusMuxIn-R4, BusMuxIn-R5, BusMuxIn-R6, BusMuxIn-R7, 
-BusMuxIn-R8, BusMuxIn-R9, BusMuxIn-R10, BusMuxIn-R11, BusMuxIn-R12, BusMuxIn-R13, BusMuxIn-R14, BusMuxIn-R15;
+wire [31:0] BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3, BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, 
+BusMuxIn_R8, BusMuxIn_R9, BusMuxIn_R10, BusMuxIn_R11, BusMuxIn_R12, BusMuxIn_R13, BusMuxIn_R14, BusMuxIn_R15;
 
 // RHI/RLO
-wire [31:0] BusMuxIn-HI, BusMuxIn-LO;
+wire [31:0] BusMuxIn_HI, BusMuxIn_LO;
 
 //Z wires
 wire [63:0] Zregin;
 wire [31:0] BusMuxInZ_HI, BusMuxInZ_LO;
 
 //PC wires
-wire [31:0] BusMuxIn-PC;
+wire [31:0] BusMuxIn_PC;
 
 //MDR wires
-wire [31:0] BusMuxIn-MDR;
+wire [31:0] BusMuxIn_MDR;
 wire [31:0] Mdatain;
 wire [31:0] RAMIn;
 
@@ -75,37 +75,37 @@ wire [31:0] A;
 
 
 //R0-15
-Register R0(clear, clock, R0in, BusMuxOut, BusMuxIn-R0);
-Register R1(clear, clock, R1in, BusMuxOut, BusMuxIn-R1);
-Register R2(clear, clock, R2in, BusMuxOut, BusMuxIn-R2);
-Register R3(clear, clock, R3in, BusMuxOut, BusMuxIn-R3);
-Register R4(clear, clock, R4in, BusMuxOut, BusMuxIn-R4);
-Register R5(clear, clock, R5in, BusMuxOut, BusMuxIn-R5);
-Register R6(clear, clock, R6in, BusMuxOut, BusMuxIn-R6);
-Register R7(clear, clock, R7in, BusMuxOut, BusMuxIn-R7);
-Register R8(clear, clock, R8in, BusMuxOut, BusMuxIn-R8);
-Register R9(clear, clock, R9in, BusMuxOut, BusMuxIn-R9);
-Register R10(clear, clock, R10in, BusMuxOut, BusMuxIn-R10);
-Register R11(clear, clock, R11in, BusMuxOut, BusMuxIn-R11);
-Register R12(clear, clock, R12in, BusMuxOut, BusMuxIn-R12);
-Register R13(clear, clock, R13in, BusMuxOut, BusMuxIn-R13);
-Register R14(clear, clock, R14in, BusMuxOut, BusMuxIn-R14);
-Register R15(clear, clock, R15in, BusMuxOut, BusMuxIn-R15);
+Register R0(clear, clock, R0in, BusMuxOut, BusMuxIn_R0);
+Register R1(clear, clock, R1in, BusMuxOut, BusMuxIn_R1);
+Register R2(clear, clock, R2in, BusMuxOut, BusMuxIn_R2);
+Register R3(clear, clock, R3in, BusMuxOut, BusMuxIn_R3);
+Register R4(clear, clock, R4in, BusMuxOut, BusMuxIn_R4);
+Register R5(clear, clock, R5in, BusMuxOut, BusMuxIn_R5);
+Register R6(clear, clock, R6in, BusMuxOut, BusMuxIn_R6);
+Register R7(clear, clock, R7in, BusMuxOut, BusMuxIn_R7);
+Register R8(clear, clock, R8in, BusMuxOut, BusMuxIn_R8);
+Register R9(clear, clock, R9in, BusMuxOut, BusMuxIn_R9);
+Register R10(clear, clock, R10in, BusMuxOut, BusMuxIn_R10);
+Register R11(clear, clock, R11in, BusMuxOut, BusMuxIn_R11);
+Register R12(clear, clock, R12in, BusMuxOut, BusMuxIn_R12);
+Register R13(clear, clock, R13in, BusMuxOut, BusMuxIn_R13);
+Register R14(clear, clock, R14in, BusMuxOut, BusMuxIn_R14);
+Register R15(clear, clock, R15in, BusMuxOut, BusMuxIn_R15);
 
 // RHI/RLO
 
-HI HI(clear, clock, HIin, BusMuxOut, BusMuxIn-HI);
-LO LO(clear, clock, LOin, BusMuxOut, BusMuxIn-LO);
+HI HI(clear, clock, HIin, BusMuxOut, BusMuxIn_HI);
+LO LO(clear, clock, LOin, BusMuxOut, BusMuxIn_LO);
 
 //RZ
 registerZ RZ(clear, clock, RZin, Zregin, BusMuxInZ_HI, BusMuxInZ_LO);
 
 //PC
 
-programCounter PC(clear, clock, PCin, BusMuxOut, BusMuxIn-PC);
+programCounter PC(clear, clock, PCin, BusMuxOut, BusMuxIn_PC);
 
 //MDR
-MDR MDR(BusMuxOut, Mdatain, read, clear, clock, MDRin, BusMuxIn-MDR, RAMIn);
+MDR MDR(BusMuxOut, Mdatain, read, clear, clock, MDRin, BusMuxIn_MDR, RAMIn);
 
 //MAR
 MAR MAR(clear, clock, MARin, BusMuxOut, MemoryIn);
@@ -123,16 +123,16 @@ adder add(A, BusMuxOut, Zregin);
 
 Bus bus(
 
-BusMuxIn-R0, BusMuxIn-R1, BusMuxIn-R2, BusMuxIn-R3, BusMuxIn-R4, BusMuxIn-R5, BusMuxIn-R6, BusMuxIn-R7, 
-BusMuxIn-R8, BusMuxIn-R9, BusMuxIn-R10, BusMuxIn-R11, BusMuxIn-R12, BusMuxIn-R13, BusMuxIn-R14, BusMuxIn-R15,
+BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3, BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, 
+BusMuxIn_R8, BusMuxIn_R9, BusMuxIn_R10, BusMuxIn_R11, BusMuxIn_R12, BusMuxIn_R13, BusMuxIn_R14, BusMuxIn_R15,
 
-BusMuxIn-HI, BusMuxIn-LO,
+BusMuxIn_HI, BusMuxIn_LO,
 
 BusMuxInZ_HI, BusMuxInZ_LO,
 
-BusMuxIn-PC,
+BusMuxIn_PC,
 
-BusMuxIn-MDR,
+BusMuxIn_MDR,
 
 R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
 
@@ -149,3 +149,4 @@ BusMuxOut);
 
 
 
+endmodule

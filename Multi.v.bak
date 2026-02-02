@@ -5,25 +5,21 @@ output [63:0] Result;
 
 reg [63:0] Result;
 reg [31:0] M_Comp;
-reg q_zero;
 integer i;
 
 twos_comp comp(M, M_Comp);
 
-always@(M or Q) 
-begin
+always@(M or Q)
 	Result = {32'b0, Q};
-	q_zero = 1'b0;
-	for(i = 0; i < 64; i = i + 1)
+	
+	for(i = 0; i < 64; i = i + i)
 	begin
-		if (!Result[0] & q_zero) begin
+		if (!Result[1] & Result[0]) begin
 			Result = Result + {M_Comp, 32'b0};
 		end
-		else if (Result[0] & !q_zero) begin
+		else if (Result[1] & !Result[0]) begin
 			Result = Result + {M, 32'b0};
 		end
-		q_zero = Result[0];
 		Result = Result >>> 1;
 	end
-end
 endmodule

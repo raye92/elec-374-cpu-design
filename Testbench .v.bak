@@ -2,7 +2,7 @@
 
 module tutorial_tb();
 
-reg clock, clear, read, compute, R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in,
+reg clock, clear, read, R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in,
 HIin, LOin, RZin, PCin, MDRin,
 R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
 HIout, LOout, RZout, PCout, MDRout, 
@@ -66,7 +66,6 @@ always @(present_state) begin
 		T3: begin
 			R1out <= 1; compute <= 1; RZin <= 1;
 			#15 R1out <= 0; compute <= 0; RZin <= 0;
-		end
 		T4: begin
 			RZout <= 1; R2in <= 1; 
 			#15 RZout <= 0; R2in <= 0; 
