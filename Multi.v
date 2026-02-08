@@ -14,12 +14,12 @@ always@(M or Q)
 begin
 	Result = {32'b0, Q};
 	q_zero = 1'b0;
-	for(i = 0; i < 64; i = i + 1)
+	for(i = 0; i < 32; i = i + 1)
 	begin
-		if (!Result[0] & q_zero) begin
+		if (!Result[0] & q_zero) begin //-1
 			Result = Result + {M_Comp, 32'b0};
 		end
-		else if (Result[0] & !q_zero) begin
+		else if (Result[0] & !q_zero) begin //+1
 			Result = Result + {M, 32'b0};
 		end
 		q_zero = Result[0];
