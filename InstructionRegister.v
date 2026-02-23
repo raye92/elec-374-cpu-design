@@ -10,7 +10,7 @@ output wire [DATA_WIDTH_OUT-1:0]ControlIn
 reg [DATA_WIDTH_IN-1:0]q;
 initial q = INIT;
 
-always @(posedge clock)
+always @(negedge clock)
 		begin
 			if (enable) begin
 				q <= BusMuxOut;

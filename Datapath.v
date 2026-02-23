@@ -5,6 +5,7 @@ module DataPath(
 	
 	input wire clear,
 	input wire read,
+//	input wire compute,
 	
 	//Register Controls
 	input wire R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in,
@@ -17,33 +18,37 @@ module DataPath(
 	
 	input wire MDRin,
 	
+	input wire ALUin,
+	
+	input wire IncPC,
+	
 	//Bus Controls
 	input wire R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
 	
 	input wire HIout, LOout,
 	
-	input wire RZout,
+	input wire ZHIout, ZLOout,
 	
 	input wire PCout,
 	
 	input wire MDRout,
 	
-	
 	input wire MARin,
 	
 	input wire IRin,
 	
-	input wire RYin
+	input wire RYin,
+	
+	input wire [31:0] Mdatain
+	
 );
-	
-	
 	
 	
 //Connector Wires
 
 wire [31:0] BusMuxOut;
 
-//R0-15
+//R0_15
 wire [31:0] BusMuxIn_R0, BusMuxIn_R1, BusMuxIn_R2, BusMuxIn_R3, BusMuxIn_R4, BusMuxIn_R5, BusMuxIn_R6, BusMuxIn_R7, 
 BusMuxIn_R8, BusMuxIn_R9, BusMuxIn_R10, BusMuxIn_R11, BusMuxIn_R12, BusMuxIn_R13, BusMuxIn_R14, BusMuxIn_R15;
 
@@ -59,7 +64,6 @@ wire [31:0] BusMuxIn_PC;
 
 //MDR wires
 wire [31:0] BusMuxIn_MDR;
-wire [31:0] Mdatain;
 wire [31:0] RAMIn;
 
 //MAR wires
@@ -74,7 +78,7 @@ wire [31:0] A;
 //Devices
 
 
-//R0-15
+//R0_15
 Register R0(clear, clock, R0in, BusMuxOut, BusMuxIn_R0);
 Register R1(clear, clock, R1in, BusMuxOut, BusMuxIn_R1);
 Register R2(clear, clock, R2in, BusMuxOut, BusMuxIn_R2);
@@ -94,15 +98,15 @@ Register R15(clear, clock, R15in, BusMuxOut, BusMuxIn_R15);
 
 // RHI/RLO
 
-HI HI(clear, clock, HIin, BusMuxOut, BusMuxIn_HI);
-LO LO(clear, clock, LOin, BusMuxOut, BusMuxIn_LO);
+HI High(clear, clock, HIin, BusMuxOut, BusMuxIn_HI);
+LO Low(clear, clock, LOin, BusMuxOut, BusMuxIn_LO);
 
 //RZ
 registerZ RZ(clear, clock, RZin, Zregin, BusMuxInZ_HI, BusMuxInZ_LO);
 
 //PC
 
-programCounter PC(clear, clock, PCin, BusMuxOut, BusMuxIn_PC);
+programCounter PC(clear, clock, PCin, IncPC, BusMuxOut, BusMuxIn_PC);
 
 //MDR
 MDR MDR(BusMuxOut, Mdatain, read, clear, clock, MDRin, BusMuxIn_MDR, RAMIn);
@@ -117,7 +121,7 @@ instructionRegister IR(clear, clock, IRin, BusMuxOut, ControlIn);
 registerY RY(clear, clock, RYin, BusMuxOut, A);
 
 //adder
-adder add(A, BusMuxOut, Zregin);
+alu arithmetic(A, BusMuxOut, clock, BusMuxOut[31:27], ALUin, Zregin);
 
 //Bus
 
@@ -137,16 +141,14 @@ BusMuxIn_MDR,
 R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
 
 HIout, LOout,
-	
-RZout,
+
+ZHIout, ZLOout,
 	
 PCout,
 	
 MDRout,
 
 BusMuxOut);
-
-
 
 
 endmodule

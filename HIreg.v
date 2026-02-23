@@ -8,7 +8,7 @@ module HI #(parameter DATA_WIDTH_IN = 32, DATA_WIDTH_OUT = 32, INIT = 32'h0)(
 
 reg [DATA_WIDTH_IN-1:0]q;
 initial q = INIT;
-always @(posedge clock)
+always @(negedge clock)
 		begin
 			if (clear) begin 
 				q <= {DATA_WIDTH_IN{1'b0}};

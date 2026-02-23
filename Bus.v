@@ -14,6 +14,7 @@ module Bus (
 	
 	input [31:0]BusMuxIn_MDR,
 	
+	
 	//encoder
 	
 	input R0out, input R1out, input R2out, input R3out, input R4out, input R5out, input R6out, input R7out, input R8out, 
@@ -58,8 +59,9 @@ always @ (*) begin
     if (ZLOout)  q = BusMuxIn_Z_LO;
 
     if (PCout)   q = BusMuxIn_PC;
+	 
+    if (MDRout)  q = BusMuxIn_MDR;
 	
-	if (MDRout)	 q = BusMuxIn_MDR;
 end
 
 assign BusMuxOut = q;
