@@ -1,0 +1,361 @@
+Commented RAM:
+
+Case 1 LOAD BEGIN: ld R7, 0x65
+@0000
+83800065
+
+
+@0065
+00000084 
+END
+
+Case 2 LOAD BEGIN: ld R0, 0x72(R2), includes an extra Load into R2 (ld R2, 0x10) (0x10) = 0x57
+
+@0000
+81000010
+80100072
+
+@0010
+00000057
+
+@00C9
+0000002B
+
+END
+
+Case 1 LDI BEGIN: Ldi R7, 0x65
+
+@0000
+8B800065
+
+END
+
+Case 2 LDI BEGIN: ldi R0, 0x72(R2), first instr is initializing R2 (ldi r2, 0x57)
+
+@0000
+89000057
+88100072
+
+END
+
+Case 1 ST BEGIN: st 0x1F, R6, init R6 = 0x63 and 0x1F = 0xD4, line 1 is init
+
+@0000
+8B000063
+9300001F	
+
+@001F
+000000D4
+
+END
+
+Case 2 ST Begin: st 0x1F(R6), R6 init R6 =  0x63 , (0x82) = 0xA7
+
+@0000
+8B000063
+9330001F
+
+@0082
+000000A7
+
+END
+
+ADDI BEGIN: addi R7, R4, -9, init R4 = 0x55
+
+@0000
+8A000055
+4BA7FFF7
+
+END
+
+ANDI BEGIN: andi R7, R4, 0x71, Preload R4 = 0x55
+
+@0000
+8A000055
+53A00071
+
+END
+
+ORI BEGIN: ori R7, R4, 0x71, Preload R4 = 0x55
+
+@0000
+8A000055
+5BA00071
+
+END
+
+BRZR Case 1 (Take BRANCH) Begin: brzr R3, 48: preload R3 = 0, preload PC = 5
+
+@0000
+89800000
+
+@0005
+A9800030
+
+END
+
+BRZR Case 2 (DONT Take BRANCH) Begin: brzr R3, 48: preload R3 = 69, preload PC = 5
+
+@0000
+89800069
+
+@0005
+A9800030
+
+END
+
+BRNZ Case 1 (Take BRANCH) brnz R3, 48: preload R3 = -9, preload PC = 5
+
+@0000
+8987FFF7
+
+@0005
+A9880030
+
+END
+
+BRNZ Case 2 (Don't Take BRANCH) brnz R3, 48: preload R3 = 0, preload PC = 5
+
+@0000
+89800000
+
+@0005
+A9880030
+
+END
+
+BRPL CASE 1 (Take BRANCH) brpl R3, 48: Preload R3 = 69 PC = 5
+@0000
+89800069
+
+@0005
+A9900030
+
+END
+
+BRPL CASE 2 (Don't Take BRANCH) brpl R3, 48: Preload R3 = -9 PC = 5
+
+@0000
+8987FFF7
+
+@0005
+A9900030
+
+END
+
+BRMI CASE 1 (Take BRANCH) brmi R3, 48: Preload R3 = -9 PC = 5
+
+@0000
+8987FFF7
+
+@0005
+A9980030
+
+
+END
+
+BRMI CASE 2 (Don't Take BRANCH) brmi R3, 48: Preload R3 = 69 PC = 5
+
+@0000
+89800069
+
+@0005
+A9980030
+
+
+END
+
+JR: jr R12 preload R12 = 0xFF PC = 0x10
+
+@0000
+8E0000FF
+
+@0010
+A6000000
+
+END
+
+JAL: jal r4, Preload r12 = 0xFF, preload r4 = 0x69
+@0000
+8E0000FF
+8A000069
+
+@0010
+9A000000
+END
+
+MFHI: mfhi R5 preload R5 = 0x69 preload Hireg = 0x9696
+@0000
+8A800069
+C2800000
+
+END
+
+MFLO: mfhi R1 preload R1 = 0x69 preload Loreg = 0x9696
+@0000
+88800069
+C8800000
+
+END
+
+OUT: out R7, Preload R7 = 0x69
+@0000
+8B800069
+BB800000
+
+END
+
+IN: in R5, Preload R5 = 0x69 Load inportdata = 0x9696
+
+@0000
+8A800069
+B2800000
+
+END
+
+
+@0000
+8A800043 ; ldi R5, 0x43
+8AA80006 ; ldi R5, 6(R5)
+82000089 ; ld R4, 0x89
+8A200004 ; ldi R4, 4(R4)
+8027FFF8 ; ld R0, -8(R4)
+89000004 ; ldi R2, 4
+8A800087 ; ldi R5, 0x87
+AA980003 ; brmi R5, 3
+8AA80005 ; ldi R5, 5(R5)
+80AFFFFD ; ld R1, -3(R5)
+D0000000 ; nop
+A8880002 ; brpl R1, 2
+89A80007 ; ldi R3, 7(R5)
+8B9FFFFC ; ldi R7, -4(R3)
+03A90000 ; add R7, R5, R2
+48880003 ; addi R1, R1, 3
+70880000 ; neg R1, R1
+78880000 ; not R1, R1
+5088000F ; andi R1, R1, 0xF
+3A010000 ; ror R4, R0, R2
+58A00005 ; ori R1, R4, 5
+2A090000 ; shra R4, R1, R2
+22A90000 ; shr R5, R5, R2
+928000A3 ; st 0xA3, R5
+42810000 ; rol R5, R0, R2
+1B900000 ; or R7, R2, R0
+12280000 ; and R4, R5, R0
+93A00089 ; st 0x89(R4), R7
+082B8000 ; sub R0, R5, R7
+32290000 ; shl R4, R5, R2
+8B800007 ; ldi R7, 7
+89800019 ; ldi R3, 0x19
+69B80000 ; mul R3, R7
+C0800000 ; mfhi R1
+CB000000 ; mflo R6
+61B80000 ; div R3, R7
+8C380002 ; ldi R8, 2(R7)
+8C9FFFFC ; ldi R9, -4(R3)
+8D300003 ; ldi R10, 3(R6)
+8D880005 ; ldi R11, 5(R1)
+9D000000 ; jal R10
+D8000000 ; halt
+
+@0089
+000000A7 ; data at 0x89
+
+@00A3
+00000068 ; data at 0xA3
+
+@00B2
+07450000 ; add R14, R8, R10
+0ECD8000 ; sub R13, R9, R11
+0F768000 ; sub R14, R14, R13
+A6000000 ; jr R12
+
+
+END
+
+
+
+Phase 4:
+
+@0000
+8A800043    ; 0   ldi R5, 0x43
+8AA80006    ; 1   ldi R5, 6(R5)
+82000089    ; 2   ld R4, 0x89
+8A200004    ; 3   ldi R4, 4(R4)
+8027FFF8    ; 4   ld R0, -8(R4)
+89000004    ; 5   ldi R2, 4
+8A800087    ; 6   ldi R5, 0x87
+AA980003    ; 7   brmi R5, 3 corrected: AA980003
+8AA80005    ; 8   ldi R5, 5(R5)
+80AFFFFD    ; 9   ld R1, -3(R5)
+D0000000    ; 10  nop
+A8900002    ; 11  brpl R1, 2 corrected: A8900002
+89A80007    ; 12  ldi R3, 7(R5)
+8B9FFFFC    ; 13  ldi R7, -4(R3)
+03A90000    ; 14  target: add R7, R5, R2
+48880003    ; 15  addi R1, R1, 3
+70880000    ; 16  neg R1, R1
+78880000    ; 17  not R1, R1
+5088000F    ; 18  andi R1, R1, 0xF
+3A010000    ; 19  ror R4, R0, R2
+58A00005    ; 20  ori R1, R4, 5
+2A090000    ; 21  shra R4, R1, R2
+22A90000    ; 22  shr R5, R5, R2
+928000A3    ; 23  st 0xA3, R5
+42810000    ; 24  rol R5, R0, R2
+1B900000    ; 25  or R7, R2, R0
+12280000    ; 26  and R4, R5, R0
+93A00089    ; 27  st 0x89(R4), R7
+082B8000    ; 28  sub R0, R5, R7
+32290000    ; 29  shl R4, R5, R2
+8B800007    ; 30  ldi R7, 7
+89800019    ; 31  ldi R3, 0x19
+69B80000    ; 32  mul R3, R7
+C0800000    ; 33  mfhi R1
+CB000000    ; 34  mflo R6
+61B80000    ; 35  div R3, R7
+8C380002    ; 36  ldi R8, 2(R7)
+8C9FFFFC    ; 37  ldi R9, -4(R3)
+8D300003    ; 38  ldi R10, 3(R6)
+8D880005    ; 39  ldi R11, 5(R1)
+9D000000    ; 40  jal R10
+B3000000    ; 41  in R6
+93000077    ; 42  st 0x77, R6
+8980002E    ; 43  ldi R3, 0x2E
+8A800001    ; 44  ldi R5, 1
+89000028    ; 45  ldi R2, 40
+
+@002E
+BB000000    ; 46  loop: out R6
+8917FFFF    ; 47  ldi R2, -1(R2)
+A9000008    ; 48  brzr R2, 8 correct 
+83800088    ; 49  ld R7, 0x88
+
+@0032
+8BBFFFFF    ; 50  loop2: ldi R7, -1(R7)
+D0000000    ; 51  nop
+AB8FFFFD    ; 52  brnz R7, -3 correct maybe
+23328000    ; 53  shr R6, R6, R5
+AB0FFFF7    ; 54  brnz R6, -9
+83000077    ; 55  ld R6, 0x77
+A1800000    ; 56  jr R3
+
+@0039
+8B000063    ; 57  done: ldi R6, 0x63
+BB000000    ; 58  out R6
+D8000000    ; 59  halt
+
+@0088
+0000FFFF
+
+@0089
+000000A7
+
+@00A3
+00000068
+
+@00B2
+07450000    ; 60  subA: add R14, R8, R10
+0ECD8000    ; 61  sub R13, R9, R11
+0F768000    ; 62  sub R14, R14, R13
+A6000000    ; 63  jr R12

@@ -105,7 +105,7 @@ always @(Present_state)
     end
 
     Reg_load2a: begin
-        #1 Mdatain <= 32'hFFFFFFE7; //Loading R3
+        #1 Mdatain <= 32'h0000000D; //Loading R3
         read <= 1; MDRin <= 1;
         #15 read <= 0; MDRin <= 0;
 	 end

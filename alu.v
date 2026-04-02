@@ -48,7 +48,7 @@ always @ (*) begin
 	Result = 64'd0;
 	shamt = B[4:0];
 
-	if (q == 5'b00000) begin //add
+	if (q == 5'b00000 || q == 5'b10000 || q == 5'b10001 || q == 5'b10010 || q == 5'b01001 || q == 5'b10101) begin //add, ld, ldi, st, addi, branch
 		Result = add_res;
 	end
 	
@@ -64,13 +64,13 @@ always @ (*) begin
 		Result = div_res;
 	end
 	
-	else if (q == 5'b00010) begin //and
+	else if (q == 5'b00010 || q == 5'b01010) begin //and, andi
 		Result = 32'd0;
 		for (i = 0; i < 32; i = i + 1) begin
 			Result[i] = A[i] & B[i];
 		end
 	end
-	else if (q == 5'b00011) begin //or
+	else if (q == 5'b00011 || q == 5'b01011) begin //or, ori
 		Result = 32'd0;
 		for (i = 0; i < 32; i = i + 1) begin
 			Result[i] = A[i] | B[i];
@@ -91,8 +91,8 @@ always @ (*) begin
 			Result = {32'd0, A};
 			for (i = 0; i < shamt; i = i + 1) begin
 				Result = Result >> 1;
+				Result[31] = sign_bit;
 			end
-			Result[31] = sign_bit;
 		end
 	else if (q == 5'b00110) //shl
 		begin

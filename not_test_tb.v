@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module mul_test_tb;
+module not_test_tb;
 
 //INPUTS TO DP
 reg clock, clear, read;
@@ -94,25 +94,26 @@ always @(Present_state)
     end
 
     Reg_load1a: begin
-		  #1 Mdatain <= 32'h00000032; //Loading R1 0x32
+		  #1 Mdatain <= 32'h00000067; //32'h00000010
+        //read = 0; MDRin = 0; clear = 0;
         read <= 1; MDRin <= 1;
         #15 read <= 0; MDRin <= 0;
     end
 
     Reg_load1b: begin
-        #1 MDRout <= 1; R1in <= 1;
-        #15 MDRout <= 0; R1in <= 0;
+        #1 MDRout <= 1; R4in <= 1;
+        #15 MDRout <= 0; R4in <= 0;
     end
 
     Reg_load2a: begin
-        #1 Mdatain <= 32'h00000022; //Loading R3 0x22
+        #1 Mdatain <= 32'h00000034; //32'h00000015
         read <= 1; MDRin <= 1;
         #15 read <= 0; MDRin <= 0;
 	 end
 
     Reg_load2b: begin
-        #1 MDRout <= 1; R3in <= 1;
-        #15 MDRout <= 0; R3in <= 0;
+        #1 MDRout <= 1; R7in <= 1;
+        #15 MDRout <= 0; R7in <= 0;
     end
 
     Reg_load3a: begin
@@ -121,8 +122,8 @@ always @(Present_state)
         #15 read <= 0; MDRin <= 0;
 	end
     Reg_load3b: begin
-        #1 MDRout <= 1; R6in <= 1;
-        #15 MDRout <= 0; R6in <= 0;
+        #1 MDRout <= 1; R0in <= 1;
+        #15 MDRout <= 0; R0in <= 0;
     end
 
     T0: begin
@@ -132,7 +133,7 @@ always @(Present_state)
 
     T1: begin
         read <= 1; MDRin <= 1;
-        Mdatain <= 32'h69880000; // opcode for "mul R3, R1" 
+        Mdatain <= 32'h7A380000; // opcode for "not R4, R7" 
 		  #15 read <= 0; MDRin <= 0;
         Mdatain <= 32'h0;
     end
@@ -143,24 +144,19 @@ always @(Present_state)
     end
 
     T3: begin
-        #1 R3out <= 1; RYin <= 1;
-        #15 R3out <= 0; RYin <= 0;
+        #1 R7out <= 1; RYin <= 1;
+        #15 R7out <= 0; RYin <= 0;
     end
 
     T4: begin
-        #1 R1out <= 1; RZin <= 1;
-        #14 R1out <= 0; RZin <= 0;
+        #1 R0out <= 1; RZin <= 1;
+        #14 R0out <= 0; RZin <= 0;
 		  
     end
 	 
 	 T5: begin
-        #1 ZLOout <= 1; LOin <= 1;
-        #15 ZLOout <= 0; LOin <= 0;
-    end
-
-	 T6: begin
-        #1 ZHIout <= 1; HIin <= 1;
-        #15 ZHIout <= 0; HIin <= 0;
+        #1 ZLOout <= 1; R4in <= 1;
+        #15 ZLOout <= 0; R4in <= 0;
     end
 
     endcase

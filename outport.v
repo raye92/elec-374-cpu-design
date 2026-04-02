@@ -1,9 +1,9 @@
-module MAR #(parameter DATA_WIDTH_IN = 32, DATA_WIDTH_OUT = 32, INIT = 32'h0)(
+module outport  #(parameter DATA_WIDTH_IN = 32, DATA_WIDTH_OUT = 32, INIT = 32'h0)(
 	input clear,
 	input clock,
 	input enable,
 	input [DATA_WIDTH_IN-1:0]BusMuxOut,
-	output wire [8:0]address
+	output wire [DATA_WIDTH_OUT-1:0]outportout
 );
 
 reg [DATA_WIDTH_IN-1:0]q;
@@ -17,5 +17,7 @@ always @(negedge clock)
 				q <= BusMuxOut;
 			end
 		end
-	assign address = q[8:0];
+	assign outportout = q[DATA_WIDTH_OUT-1:0];
 endmodule
+
+

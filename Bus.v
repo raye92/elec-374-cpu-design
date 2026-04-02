@@ -14,6 +14,10 @@ module Bus (
 	
 	input [31:0]BusMuxIn_MDR,
 	
+	input [31:0]BusMuxIn_inport,
+	
+	input [31:0]BusMuxIn_IR,
+	
 	
 	//encoder
 	
@@ -27,6 +31,10 @@ module Bus (
 	input PCout,
 	
 	input MDRout,
+	
+	input inportout,
+	
+	input Cout,
 	
 	output wire [31:0]BusMuxOut
 	
@@ -61,6 +69,10 @@ always @ (*) begin
     if (PCout)   q = BusMuxIn_PC;
 	 
     if (MDRout)  q = BusMuxIn_MDR;
+	 
+	 if (inportout) q = BusMuxIn_inport; 
+	 
+	 if (Cout) q = BusMuxIn_IR; 
 	
 end
 
